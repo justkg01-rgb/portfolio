@@ -86,11 +86,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .logos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
 .lg{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);display:grid;place-items:center;padding:18px 14px;min-height:108px}
 .lg img{max-width:82%;max-height:46px;width:auto;height:auto;object-fit:contain;filter:var(--logo-filter)}
-.lg.tall img{max-height:84px}
-a.lg.go{color:inherit;text-decoration:none;cursor:pointer;transition:background .15s}
-a.lg.go:hover,a.lg.go:focus-visible{background:var(--line)}
-.sv.flash{outline:3px solid var(--ink);outline-offset:3px}
-:root{--logo-filter:brightness(0)}
+.lg.tall img{max-height:84px}:root{--logo-filter:brightness(0)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--logo-filter:brightness(0) invert(1)}}
 :root[data-theme="dark"]{--logo-filter:brightness(0) invert(1)}
 @media (max-width: 1000px){.logos{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -713,7 +709,7 @@ const P = [
 ];
 
 // 함께한 클라이언트 로고 (media/logos)
-// [파일, 이름, 기관 수, 클래스, 랜딩 '프로젝트:영상ID' 또는 '프로젝트'] — 로고를 누르면 해당 영상으로 이동
+// [파일, 이름, 기관 수, 클래스, 관련 작품:영상ID(참고용)]
 const BRANDS = [
   ['sktelecom.svg','SK텔레콤'],['samsung.png','삼성전자',1,'','branded:Cv8SkAc0HUw'],['hanwha.svg','한화',1,'tall','branded:GhrYEgzJ9o0'],['hyundai.svg','현대자동차그룹',1,'','samoney:-pQmosG8vGA'],['kia.svg','기아',1,'','eunsom:bcRkQMioN1k'],['gsretail.png','GS리테일',1,'','yorisa'],
   ['yuhan.png','유한킴벌리',1,'','branded:VYwenctY3kY'],['dongsuh.png','동서식품',1,'','jjin:qbUzrcd7K54'],['drg.png','닥터지',1,'','jjin:2gxqK1LjwA0'],['lingtea.png','링티',1,'','jjin:Bxi6k0eDzkI'],['hazzys.png','헤지스',1,'','jjin:2ViWnrfJ8GY'],['secretday.png','시크릿데이',1,'','smile:BHMfCxq2lgQ'],
@@ -974,11 +970,7 @@ function renderPerf(){
     ['국방 우수 콘텐츠', '대상', '', '2024 · 다큐 1일'],
   ];
   $('#heroNums').innerHTML = hn.map(([k, v, u, d]) => `<div class="hn"><span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span></div>`).join('');
-  $('#brands').innerHTML = BRANDS.map(([f, n, , cls, go]) => {
-    const img = `<img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy">`, c = `lg${cls ? ' ' + cls : ''}`;
-    return go ? `<a class="${c} go" role="listitem" href="#p-${go.split(':')[0]}" data-go="${go}" aria-label="${esc(n)} 작업 영상 보기">${img}</a>`
-              : `<div class="${c}" role="listitem">${img}</div>`;
-  }).join('');
+  $('#brands').innerHTML = BRANDS.map(([f, n, , cls]) => `<div class="lg${cls ? ' ' + cls : ''}" role="listitem"><img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy"></div>`).join('');
 
   const K = 'var(--ink)', MUTE = 'var(--muted-bar)';
   columns($('#chRecipe'), {
@@ -1021,33 +1013,7 @@ function renderPerf(){
 }
 
 /* ================= 인터랙션 ================= */
-// 클라이언트 로고 → 해당 작품·영상으로 이동
-function landTo(pid, vid){
-  const p = P.find(x => x.id === pid); if (!p) return;
-  setView(p.cat);
-  let el = document.getElementById('p-' + pid);
-  if (vid){
-    const hi = p.H.findIndex(x => x.id === vid);
-    if (hi >= 0){
-      if (hi >= SHOW) p.open = true;
-      p.cur = hi;
-      $('#main-' + pid).innerHTML = player(p.H[hi], false);
-      $('#cap-' + pid).innerHTML = capHTML(p, hi);
-      $('#rest-' + pid).innerHTML = restHTML(p);
-      el = $('#main-' + pid);
-    } else if (p.V.some(x => x.id === vid)){
-      p.open = true;
-      $('#rest-' + pid).innerHTML = restHTML(p);
-      const b = document.querySelector(`#rest-${pid} [data-yt="${vid}"]`);
-      if (b){ el = b.closest('.sv'); el.classList.add('flash'); }
-    }
-  }
-  history.replaceState(null, '', '#p-' + pid);
-  requestAnimationFrame(() => el.scrollIntoView({block: 'center'}));
-}
 document.addEventListener('click', e => {
-  const go = e.target.closest('[data-go]');
-  if (go){ e.preventDefault(); const [pid, vid] = go.dataset.go.split(':'); landTo(pid, vid); return; }
   const play = e.target.closest('.play');
   if (play){
     const f = document.createElement('iframe');
