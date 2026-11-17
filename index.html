@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -87,6 +87,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .lg{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);display:grid;place-items:center;padding:18px 14px;min-height:108px}
 .lg img{max-width:82%;max-height:46px;width:auto;height:auto;object-fit:contain;filter:var(--logo-filter)}
 .lg.tall img{max-height:84px}
+a.lg.go{color:inherit;text-decoration:none;cursor:pointer;transition:background .15s}
+a.lg.go:hover,a.lg.go:focus-visible{background:var(--line)}
+.sv.flash{outline:3px solid var(--ink);outline-offset:3px}
 :root{--logo-filter:brightness(0)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--logo-filter:brightness(0) invert(1)}}
 :root[data-theme="dark"]{--logo-filter:brightness(0) invert(1)}
@@ -319,7 +322,7 @@ footer{margin-top:56px;border-top:2px solid var(--ink)}
   <div id="viewWorks">
     <div class="wrap" id="coverWrap">
       <section class="reel" aria-label="쇼릴">
-        <video id="reel" src="media/showreel.mp4?v=11" poster="media/showreel.jpg?v=11" muted loop playsinline preload="auto"></video>
+        <video id="reel" src="media/showreel.mp4?v=12" poster="media/showreel.jpg?v=12" muted loop playsinline preload="auto"></video>
         <div class="reel-ui"><div><span>SHOWREEL 2026</span><br><b>박재광</b></div><button class="reel-btn" id="reelBtn" type="button">일시정지</button></div>
       </section>
       <div class="ticker" aria-hidden="true"><div class="ticker-in" id="ticker"></div></div>
@@ -391,7 +394,7 @@ footer{margin-top:56px;border-top:2px solid var(--ink)}
             <h4>시리즈별 합산 조회수</h4>
             <p class="sub">시리즈 전체 에피소드의 유튜브 조회수 합계. 막대를 누르면 작품으로 이동합니다.</p>
             <div class="hbars" id="chSeries"></div>
-            <p class="note">유튜브 공개 조회수 2026.11 수집 기준. 합산 100만 회 이상 시리즈만 표시. 데일리 뉴스·인디아나준스는 제외.</p>
+            <p class="note">유튜브 공개 조회수 2026.11 수집 기준. 합산 100만 회 이상 시리즈만 표시.</p>
           </div>
           <div class="card">
             <h4>육군 채널 영상당 조회수</h4>
@@ -476,7 +479,7 @@ footer{margin-top:56px;border-top:2px solid var(--ink)}
             <li><span class="y">2021.06</span><div><b>MBC 격려상 (팀)</b></div></li>
             <li><span class="y">2019.08</span><div><b>컬러리스트산업기사</b></div></li>
             <li><span class="y">2018.12</span><div><b>시각디자인산업기사</b></div></li>
-            <li><span class="y">2020.03–</span><div><b>서울과학기술대학교 문화예술학과</b><p>재직자전형</p></div></li>
+            <li><span class="y">2020.03–</span><div><b>서울과학기술대학교 문화예술학과</b></div></li>
           </ul>
         </div>
       </div>
@@ -581,18 +584,18 @@ const P = [
    syn:'강다솜·이영은·김정현 아나운서가 전하는 14F 간판 큐레이션 뉴스.',
    intent:['2년간 데일리 뉴스를 촬영하고 편집하며 통계청, 서울특별시 등 공공기관과 협업했습니다. 사실을 정확히 전하면서도 끝까지 보게 만드는 구성이 중요하다는 것을 배웠습니다.',
      '지상파 뉴스를 숏폼·SNS 문법으로 옮기는 14F의 출발점에서 데일리 뉴스 포맷을 함께 만들었습니다.'],
-   big:[['최다 조회수','55만']], yt:['daily'],
+   big:[['최다 조회수','55만']], yt:['daily'], flat:true,
    v:[]},
   {id:'jamak', cat:'news', title:'자막뉴스', year:2020, client:'MBC 14F', genre:'인터넷뉴스',
    role:'구성 · 편집 · 디자인 · 모션그래픽 · 썸네일',
    syn:'핵심만 자막으로 전하는 자막뉴스 시리즈.',
-   big:[['총 조회수','@sum'],['최다 조회수','988만']], yt:['jamak'], minLong:60,
+   big:[['총 조회수','@sum'],['최다 조회수','988만']], yt:['jamak'], minLong:60, keepOrder:true,
    v:['y:qRD_S_aLmkU','y:tv417PGNk_A','y:dtPzB4_JHP4','y:HQAPH6RQxVM']},
   {id:'tokyo', cat:'news', title:'2020 도쿄올림픽', year:2021, client:'MBC 14F', genre:'인터넷뉴스 TF',
    role:'편집',
    syn:'도쿄올림픽 인터넷뉴스 TF의 하이라이트·인터뷰 클립.',
    big:[['총 조회수','@sum'],['최다 조회수','@max']],
-   v:['y:3HvT9a48RcA'], yt:['tokyo'], minLong:60},
+   v:['y:3HvT9a48RcA'], yt:['tokyo'], minLong:60, pin:true},
   {id:'newsdesk', cat:'news', title:'뉴스데스크 코너', year:2020, client:'MBC', genre:'TV뉴스',
    role:'촬영 · 편집 · 디자인 · 모션그래픽',
    syn:'MBC 뉴스데스크 코너 제작.',
@@ -607,7 +610,7 @@ const P = [
   {id:'dukjil', cat:'mash', title:'눌러서 덕질해제', year:2021, client:'MBC 14F', genre:'아카이브 매쉬업', period:'20.08 – 21.06',
    role:'구성 · 편집 · 디자인',
    syn:'MBC 아카이브의 무대 영상으로 가수의 데뷔부터 현재까지 일대기를 담은 콘텐츠.',
-   big:[['최다 조회수','135만']], peak:135, peakLabel:'눌러서 덕질해제',
+   big:[['최다 조회수','@max']], peak:138, peakLabel:'눌러서 덕질해제',
    v:['y:wTx46H8zAN8'], yt:['dukjil']},
 
   // 광고
@@ -645,9 +648,6 @@ const P = [
   {id:'mois', cat:'brand', title:'행정안전부 캠페인', year:2020, client:'행정안전부', genre:'캠페인', period:'2020.12',
    role:'구성 · 편집 · 모션그래픽',
    syn:'코로나19 속 위기를 버텨 낸 2020년 대한민국의 모습을 담은 캠페인.',
-   intent:['코로나19로 모두가 지쳐 있던 2020년 말, 위기를 버텨 온 시민들의 모습을 한 편으로 엮었습니다.',
-     '정보를 나열하기보다 함께 견뎌 왔다는 공감이 전해지도록 편집했고, 4.7만 회 조회와 1천 개가 넘는 공감을 받았습니다.'],
-   big:[['조회수','4.7만'],['공감','1,000+']],
    v:['y:R_oA3-jG2fE']},
   {id:'tips', cat:'brand', title:'병영꿀팁!', year:2024, client:'육군', genre:'숏폼', period:'24.03 – 24.06',
    role:'기획 · 촬영 · 편집',
@@ -658,7 +658,7 @@ const P = [
    role:'촬영 · 편집 · 디자인 · 모션그래픽', clients:'한화 · 삼성전자 · 유한킴벌리 · 통계청 · 여성가족부 · 서울특별시 · 서울산업진흥원 · 이노베이션 아카데미 · 한국출판문화산업진흥원',
    syn:'기업·공공기관과 함께 만든 뉴스형 브랜디드 콘텐츠.',
    intent:['기관의 메시지를 정확하고 신뢰감 있게 전하되, 뉴스 문법으로 끝까지 보게 만드는 구성을 고민했습니다.'],
-   v:['y:GhrYEgzJ9o0','y:LD3s3GY4u8w','ys:iWdKdSCz2vw','ys:Cv8SkAc0HUw','ys:VYwenctY3kY','ys:DpDGg63jZuU','ys:jA03VG0LwF4','ys:Uaq2BaHEYOk','ys:w2dJ5NqQkP8']},
+   v:['y:GhrYEgzJ9o0','y:LD3s3GY4u8w','y:iWdKdSCz2vw','y:Cv8SkAc0HUw','y:VYwenctY3kY','y:DpDGg63jZuU','y:jA03VG0LwF4','y:Uaq2BaHEYOk','y:w2dJ5NqQkP8'], flat:true},
   {id:'eunsom', cat:'brand', title:'은이랑솜이랑', year:2019, client:'MBC 14F', genre:'코너물 · 브랜디드', period:'2019',
    role:'디자인 · 모션그래픽', clients:'기아',
    syn:'이영은·강다솜 아나운서의 생활 정보 코너. 연말 신차 구매 꿀팁 편은 기아 브랜디드.',
@@ -712,14 +712,15 @@ const P = [
    v:['y:dgUv7kKNP2w']},
 ];
 
-// 함께한 클라이언트 로고 (media/logos). n = 기관 수(정부 로고 1칸 = 3개 기관)
+// 함께한 클라이언트 로고 (media/logos)
+// [파일, 이름, 기관 수, 클래스, 랜딩 '프로젝트:영상ID' 또는 '프로젝트'] — 로고를 누르면 해당 영상으로 이동
 const BRANDS = [
-  ['sktelecom.svg','SK텔레콤'],['samsung.png','삼성전자'],['hanwha.svg','한화', 1, 'tall'],['hyundai.svg','현대자동차그룹'],['kia.svg','기아'],['gsretail.png','GS리테일'],
-  ['yuhan.png','유한킴벌리'],['dongsuh.png','동서식품'],['drg.png','닥터지'],['lingtea.png','링티'],['hazzys.png','헤지스'],['secretday.png','시크릿데이'],
-  ['ashley.png','애슐리'],['goobne.png','굽네'],['mrpizza.svg','미스터피자'],['okcashbag.png','OK캐쉬백'],['syrup.png','시럽'],['weplay.png','위플레이'],
-  ['onemount.png','원마운트'],['whalebooks.png','웨일북'],['sase.png','SASE'],['kx.png','KX이노베이션'],['innoaca.png','이노베이션 아카데미'],['seoulzoo.png','서울대공원'],
-  ['seoul.png','서울특별시'],['sba.png','서울산업진흥원(SBA)'],['kotra.png','KOTRA'],['kpipa.png','한국출판문화산업진흥원'],['kostat.png','통계청'],['mogef.png','여성가족부'],
-  ['mcst.png','문화체육관광부'],['mois.png','행정안전부'],
+  ['sktelecom.svg','SK텔레콤'],['samsung.png','삼성전자',1,'','branded:Cv8SkAc0HUw'],['hanwha.svg','한화',1,'tall','branded:GhrYEgzJ9o0'],['hyundai.svg','현대자동차그룹',1,'','samoney:-pQmosG8vGA'],['kia.svg','기아',1,'','eunsom:bcRkQMioN1k'],['gsretail.png','GS리테일',1,'','yorisa'],
+  ['yuhan.png','유한킴벌리',1,'','branded:VYwenctY3kY'],['dongsuh.png','동서식품',1,'','jjin:qbUzrcd7K54'],['drg.png','닥터지',1,'','jjin:2gxqK1LjwA0'],['lingtea.png','링티',1,'','jjin:Bxi6k0eDzkI'],['hazzys.png','헤지스',1,'','jjin:2ViWnrfJ8GY'],['secretday.png','시크릿데이',1,'','smile:BHMfCxq2lgQ'],
+  ['ashley.png','애슐리',1,'','yorisa:xzS_n40wteg'],['goobne.png','굽네',1,'','yorisa:25xL_XnxQX0'],['mrpizza.svg','미스터피자',1,'','yorisa:x7SnNsUWR6w'],['okcashbag.png','OK캐쉬백',1,'','smile:jm8DJjZZDtY'],['syrup.png','시럽'],['weplay.png','위플레이',1,'','smile:c6M2hEdiygQ'],
+  ['onemount.png','원마운트',1,'','smile'],['whalebooks.png','웨일북',1,'','samoney:lgO09OSyxsY'],['sase.png','SASE',1,'','yorisa:JqGr-jy1DsU'],['kx.png','KX이노베이션',1,'','trailer:AY-L74pGtU2'],['innoaca.png','이노베이션 아카데미',1,'','branded:DpDGg63jZuU'],['seoulzoo.png','서울대공원',1,'','samoney:S6bIPti_7UU'],
+  ['seoul.png','서울특별시',1,'','branded:iWdKdSCz2vw'],['sba.png','서울산업진흥원(SBA)',1,'','branded:Uaq2BaHEYOk'],['kotra.png','KOTRA'],['kpipa.png','한국출판문화산업진흥원',1,'','branded:jA03VG0LwF4'],['kostat.png','통계청',1,'','branded:LD3s3GY4u8w'],['mogef.png','여성가족부',1,'','branded:w2dJ5NqQkP8'],
+  ['mcst.png','문화체육관광부',1,'','mcst:SDZqSNeAy_Q'],['mois.png','행정안전부',1,'','mois:R_oA3-jG2fE'],
 ];
 
 const T = {
@@ -751,14 +752,20 @@ function buildVideos(p){
   const push = it => { if (!seen.has(it.id)) { seen.add(it.id); out.push(it); } };
   const minL = p.minLong || 180;
   // 롱폼 = 가로 + minLong초 이상. 더 짧은 가로 영상은 클립(yc), 세로는 쇼츠(ys)
-  const kindOf = (k, r) => (k === 'y' && r && r[5] && r[5] < minL) ? 'yc' : k;
+  // flat = 세로 촬영이지만 쇼츠가 아닌 본편(가로 레이아웃·썸네일로 표시)
+  const kindOf = (k, r) => p.flat ? 'y' : (k === 'y' && r && r[5] && r[5] < minL) ? 'yc' : k;
   p.v.forEach(code => {
     const i = code.indexOf(':'), k = code.slice(0, i), id = code.slice(i + 1), r = YTIDX[id];
     push({k: kindOf(k, r), id, t: r ? r[4] : (T[id] || ''), vc: r ? r[2] : 0, dt: r ? r[3] : ''});
   });
   (p.yt || []).flatMap(key => (typeof YT === 'object' && YT[key]) || []).sort((a, b) => a[3].localeCompare(b[3]))
-    .forEach(r => push({k: r[1] ? 'ys' : kindOf('y', r), id: r[0], t: r[4], vc: r[2], dt: r[3]}));
-  out.sort((a, b) => (b.vc || 0) - (a.vc || 0)); // 조회수 높은 순 (조회수 없는 자체 호스팅 영상은 원래 순서 유지)
+    .forEach(r => push({k: (r[1] && !p.flat) ? 'ys' : kindOf('y', r), id: r[0], t: r[4], vc: r[2], dt: r[3]}));
+  // 조회수 높은 순. keepOrder = 기존 순서 유지, pin = 대표 영상(v)을 맨 앞에 고정
+  if (!p.keepOrder){
+    const head = p.pin ? out.splice(0, p.v.length) : [];
+    out.sort((a, b) => (b.vc || 0) - (a.vc || 0));
+    out.unshift(...head);
+  }
   p.H = out.filter(x => x.k === 'y' || x.k === 'a');
   p.V = out.filter(x => !(x.k === 'y' || x.k === 'a'));
   p.sumVc = out.reduce((s, x) => s + (x.vc || 0), 0);
@@ -967,7 +974,11 @@ function renderPerf(){
     ['국방 우수 콘텐츠', '대상', '', '2024 · 다큐 1일'],
   ];
   $('#heroNums').innerHTML = hn.map(([k, v, u, d]) => `<div class="hn"><span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span></div>`).join('');
-  $('#brands').innerHTML = BRANDS.map(([f, n, , cls]) => `<div class="lg${cls ? ' ' + cls : ''}" role="listitem"><img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy"></div>`).join('');
+  $('#brands').innerHTML = BRANDS.map(([f, n, , cls, go]) => {
+    const img = `<img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy">`, c = `lg${cls ? ' ' + cls : ''}`;
+    return go ? `<a class="${c} go" role="listitem" href="#p-${go.split(':')[0]}" data-go="${go}" aria-label="${esc(n)} 작업 영상 보기">${img}</a>`
+              : `<div class="${c}" role="listitem">${img}</div>`;
+  }).join('');
 
   const K = 'var(--ink)', MUTE = 'var(--muted-bar)';
   columns($('#chRecipe'), {
@@ -1010,7 +1021,33 @@ function renderPerf(){
 }
 
 /* ================= 인터랙션 ================= */
+// 클라이언트 로고 → 해당 작품·영상으로 이동
+function landTo(pid, vid){
+  const p = P.find(x => x.id === pid); if (!p) return;
+  setView(p.cat);
+  let el = document.getElementById('p-' + pid);
+  if (vid){
+    const hi = p.H.findIndex(x => x.id === vid);
+    if (hi >= 0){
+      if (hi >= SHOW) p.open = true;
+      p.cur = hi;
+      $('#main-' + pid).innerHTML = player(p.H[hi], false);
+      $('#cap-' + pid).innerHTML = capHTML(p, hi);
+      $('#rest-' + pid).innerHTML = restHTML(p);
+      el = $('#main-' + pid);
+    } else if (p.V.some(x => x.id === vid)){
+      p.open = true;
+      $('#rest-' + pid).innerHTML = restHTML(p);
+      const b = document.querySelector(`#rest-${pid} [data-yt="${vid}"]`);
+      if (b){ el = b.closest('.sv'); el.classList.add('flash'); }
+    }
+  }
+  history.replaceState(null, '', '#p-' + pid);
+  requestAnimationFrame(() => el.scrollIntoView({block: 'center'}));
+}
 document.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]');
+  if (go){ e.preventDefault(); const [pid, vid] = go.dataset.go.split(':'); landTo(pid, vid); return; }
   const play = e.target.closest('.play');
   if (play){
     const f = document.createElement('iframe');
