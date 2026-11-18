@@ -852,9 +852,8 @@ function bigHTML(p){
   const eng = p.eng;
   const TOK = {'@eng': () => fmtN(eng), '@sum': () => fmtV(p.sumVc), '@max': () => mx(all), '@avg': () => av(all), '@hmax': () => mx(p.H), '@havg': () => av(p.H), '@vmax': () => mx(p.V)};
   // 유튜브 영상이 있으면 '최다 인게이지먼트(좋아요+댓글)'를 자동으로 덧붙임
-  const base = (p.big || [['제작 연도', String(p.year)]])
-    .concat(p.sns.filter(s => s.pf !== '틱톡').map(s => [s.pf + ' 최다', fmtV(s.max)]))
-    .concat(eng >= 1e4 && !p.noEng ? [['최다 인게이지먼트', '@eng']] : []);
+  // SNS·인게이지먼트 수치는 성과 탭에만 표시
+  const base = p.big && p.big.length ? p.big : [['제작 연도', String(p.year)]];
   const items = base.map(([k, v]) => [k, TOK[v] ? TOK[v]() : v]);
   return `<div class="big">${items.map(([k, v]) => {
     const m = String(v).match(/^(.*?)(만|억|%|건)$/);
@@ -868,9 +867,7 @@ function slideHTML(p, i){
       <dt>장르</dt><dd>${esc(p.genre)}</dd>
       <dt>역할</dt><dd>${esc(p.role)}${p.contrib ? ` · 기여도 ${p.contrib}` : ''}</dd>
       ${p.clients ? `<dt>클라이언트</dt><dd>${esc(p.clients)}</dd>` : ''}
-      ${eps > 1 ? `<dt>에피소드</dt><dd>${eps}편${p.sumVc ? ` · 합산 조회수 ${fmtV(p.sumVc)}` : ''}</dd>` : ''}
-      ${p.sns.map(s => `<dt>${s.pf}</dt><dd>${s.n}편 · 합산 조회수 ${fmtV(s.sum)} · 최다 ${fmtV(s.max)}</dd>`).join('')}
-    </dl>`;
+      ${eps > 1 ? `<dt>에피소드</dt><dd>${eps}편${p.sumVc ? ` · 합산 조회수 ${fmtV(p.sumVc)}` : ''}</dd>` : ''}    </dl>`;
   return `<article class="slide${i % 2 ? ' flip' : ''}" id="p-${p.id}" data-cat="${p.cat}">
     <div class="info">
       <div class="info-top"><span class="crumb">Portfolio – ${c.name}</span><span class="client">${esc(p.client)}<small>${p.year}</small></span></div>
