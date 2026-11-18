@@ -192,6 +192,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .block > p.lead{margin:0 0 18px;color:var(--ink-2);max-width:52em}
 .hero-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
 .hn{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);padding:22px 20px;display:grid;gap:4px;align-content:start}
+@media (min-width: 1001px){.hn:last-child:nth-child(4n+3){grid-column:span 2}}
 .hn .k{font-size:14px;font-weight:700}
 .hn .v{font-weight:900;font-size:clamp(42px,5vw,64px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
 .hn .v small{font-size:.42em;font-weight:800;margin-left:3px}
@@ -393,14 +394,8 @@ footer{margin-top:56px;border-top:2px solid var(--ink)}
             <p class="note">유튜브 공개 조회수 2026.11 수집 기준. 합산 100만 회 이상 시리즈만 표시.</p>
           </div>
           <div class="card wide">
-            <h4>인스타그램 · 틱톡 합산 조회수</h4>
-            <p class="sub">같은 콘텐츠를 숏폼으로 재편집해 올린 SNS 계정의 조회수 합계(재직 기간 업로드분).</p>
-            <div class="hbars" id="chSns"></div>
-            <p class="note">2026.11.18 공개 조회수 기준. 인스타그램 @army_rok · 틱톡 @studioplanet_.</p>
-          </div>
-          <div class="card wide">
             <h4>시리즈별 최다 인게이지먼트</h4>
-            <p class="sub">한 영상이 받은 좋아요 + 댓글의 최대값. 유튜브·인스타그램·틱톡 중 가장 높은 값.</p>
+            <p class="sub">한 영상이 받은 좋아요 + 댓글의 최대값(유튜브, 2026.11.18 기준).</p>
             <div class="hbars" id="chEng"></div>
           </div>
           <div class="card">
@@ -656,7 +651,7 @@ const P = [
   {id:'tips', cat:'brand', title:'병영꿀팁!', year:2024, client:'육군', genre:'숏폼', period:'24.03 – 24.06',
    role:'기획 · 촬영 · 편집',
    syn:'복무 중인 전우들에게 소소한 병영 정보를 알려 주는 숏폼 시리즈.',
-   big:[],
+   big:[['인스타그램 최다 조회수','190만'],['인스타그램 합산 조회수','210만']],
    v:['ys:CRjx3YutVOA'], yt:['tips']},
   {id:'branded', cat:'brand', title:'14F 브랜디드 콘텐츠', year:2021, client:'MBC 14F', genre:'인터넷뉴스 브랜디드',
    role:'촬영 · 편집 · 디자인 · 모션그래픽', clients:'한화 · 삼성전자 · 유한킴벌리 · 통계청 · 여성가족부 · 서울특별시 · 서울산업진흥원 · 이노베이션 아카데미 · 한국출판문화산업진흥원',
@@ -727,13 +722,9 @@ const BRANDS = [
   ['mcst.png','문화체육관광부',1,'','mcst:SDZqSNeAy_Q'],['mois.png','행정안전부',1,'','mois:R_oA3-jG2fE'],
 ];
 
-// 같은 콘텐츠의 인스타그램·틱톡 성과 (재직 기간 업로드분, 2026.11.18 공개 수치). lc = 최다 조회 영상의 [좋아요, 댓글]
+// 다른 플랫폼 성과 — 병영꿀팁 인스타그램(@army_rok)만 기재 (2026.11.18). lc = 최다 조회 영상의 [좋아요, 댓글]
 const SNS = [
-  {p:'jjin',  pf:'틱톡',       acct:'@studioplanet_', n:35, sum:3513000, max:1100000, lc:[55000,106], url:'https://www.tiktok.com/@studioplanet_/video/7107508065519373570'},
-  {p:'tips',  pf:'인스타그램', acct:'@army_rok',      n:3,  sum:2099000, max:1897000, lc:[23000,771], url:'https://www.instagram.com/reel/C575UOwP_XI/'},
-  {p:'smile', pf:'틱톡',       acct:'@studioplanet_', n:21, sum:1275000, max:557200,  lc:[5521,108],  url:'https://www.tiktok.com/@studioplanet_/video/7163555618840694018'},
-  {p:'docu1', pf:'인스타그램', acct:'@army_rok',      n:6,  sum:499000,  max:285000,  lc:[1623,97],   url:'https://www.instagram.com/reel/C6QZn7RPJUn/'},
-  {p:'photo', pf:'인스타그램', acct:'@army_rok',      n:2,  sum:169000,  max:120000,  lc:[684,18],   url:'https://www.instagram.com/reel/C3E9mAFP1Fb/'},
+  {p:'tips', pf:'인스타그램', acct:'@army_rok', n:3, sum:2099000, max:1897000, lc:[23000,771]},
 ];
 
 const T = {
@@ -1004,9 +995,7 @@ function renderPerf(){
     ['국방 우수 콘텐츠', '대상', '', '2024 · 다큐 1일'],
   ];
   const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
-  const snsSum = SNS.reduce((s, x) => s + x.sum, 0);
   hn.push(['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 영상 1편 좋아요+댓글`, topEng]);
-  hn.push(['SNS 합산 조회수', Math.round(snsSum / 1e4).toLocaleString(), '만 회', '인스타그램 · 틱톡 (2026.11)']);
   $('#heroNums').innerHTML = hn.map(([k, v, u, d, ep]) => {
     const inner = `<span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span>`;
     return `<div class="hn" ${ep ? engTip(ep) : ''}>${inner}</div>`;
@@ -1034,9 +1023,6 @@ function renderPerf(){
   const ser = P.filter(p => p.isSeries && !NO_SUM.has(p.id) && p.sumVc >= 1e6).sort((a, b) => b.sumVc - a.sumVc), smx = ser[0].sumVc;
   $('#chSeries').innerHTML = ser.map(p =>
     `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${catOf(p.cat).name}</em></span><span class="track"><span class="fill" style="width:${(p.sumVc / smx) * 80}%" data-tip="${esc(p.title)} · 합산 ${fmtV(p.sumVc)}회"></span><span class="n">${fmtV(p.sumVc)}</span></span></a>`).join('');
-  const sns = [...SNS].sort((a, b) => b.sum - a.sum), snx = sns[0].sum;
-  $('#chSns').innerHTML = sns.map(s => { const p = P.find(x => x.id === s.p);
-    return `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${s.pf} · ${s.n}편</em></span><span class="track"><span class="fill" style="width:${(s.sum / snx) * 80}%" data-tip="${esc(p.title)} · ${s.pf} 합산 ${fmtV(s.sum)}회 · 최다 ${fmtV(s.max)}회"></span><span class="n">${fmtV(s.sum)}</span></span></a>`; }).join('');
   const eg = P.filter(p => p.eng >= 1e4 && p.id !== 'indiana').sort((a, b) => b.eng - a.eng), egx = eg[0].eng;
   $('#chEng').innerHTML = eg.map(p =>
     `<div class="hbar" ${engTip(p)}><span class="nm">${esc(p.title)}<em>${p.top.pf}</em></span><span class="track"><span class="fill" style="width:${(p.eng / egx) * 80}%"></span><span class="n">${fmtN(p.eng)}</span></span></div>`).join('');
