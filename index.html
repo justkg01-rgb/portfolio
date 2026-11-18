@@ -192,7 +192,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .block > p.lead{margin:0 0 18px;color:var(--ink-2);max-width:52em}
 .hero-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
 .hn{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);padding:22px 20px;display:grid;gap:4px;align-content:start}
-@media (min-width: 1001px){.hn:last-child:nth-child(4n+3){grid-column:span 2}}
 .hn .k{font-size:14px;font-weight:700}
 .hn .v{font-weight:900;font-size:clamp(42px,5vw,64px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
 .hn .v small{font-size:.42em;font-weight:800;margin-left:3px}
@@ -651,7 +650,7 @@ const P = [
   {id:'tips', cat:'brand', title:'병영꿀팁!', year:2024, client:'육군', genre:'숏폼', period:'24.03 – 24.06',
    role:'기획 · 촬영 · 편집',
    syn:'복무 중인 전우들에게 소소한 병영 정보를 알려 주는 숏폼 시리즈.',
-   big:[['인스타그램 최다 조회수','190만'],['인스타그램 합산 조회수','210만']],
+   big:[['인스타그램 최다 조회수','190만']],
    v:['ys:CRjx3YutVOA'], yt:['tips']},
   {id:'branded', cat:'brand', title:'14F 브랜디드 콘텐츠', year:2021, client:'MBC 14F', genre:'인터넷뉴스 브랜디드',
    role:'촬영 · 편집 · 디자인 · 모션그래픽', clients:'한화 · 삼성전자 · 유한킴벌리 · 통계청 · 여성가족부 · 서울특별시 · 서울산업진흥원 · 이노베이션 아카데미 · 한국출판문화산업진흥원',
@@ -986,16 +985,19 @@ function engTip(p){
 }
 function renderPerf(){
   const totalVc = P.filter(p => p.isSeries && !NO_SUM.has(p.id)).reduce((s, p) => s + p.sumVc, 0);
+  // 4 × 2 구성 — 1행: 브랜디드·수주·클라이언트·수상 / 2행: 조회수·인게이지먼트·영상 수
+  const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
+  const nVid = P.reduce((s, p) => s + p.H.length + p.V.length, 0);
   const hn = [
     ['브랜디드 콘텐츠', '30', '건+', 'PM·기획·메인 연출·클라이언트 커뮤니케이션'],
     ['브랜디드 수주 최고액', '1', '억 원', '단일 에피소드 기준'],
     ['함께한 클라이언트', String(BRANDS.reduce((s, b) => s + (b[2] || 1), 0)), '곳', '기업 · 공공기관'],
-    ['숏폼 최다 조회수', '1,016', '만', '찐한친구 시즌2'],
-    ['시리즈 합산 조회수', ...(totalVc >= 1e8 ? [(totalVc / 1e8).toFixed(1), '억 회'] : [Math.round(totalVc / 1e4).toLocaleString(), '만 회']), '유튜브 공개 조회수 (2026.11)'],
     ['국방 우수 콘텐츠', '대상', '', '2024 · 다큐 1일'],
+    ['시리즈 합산 조회수', ...(totalVc >= 1e8 ? [(totalVc / 1e8).toFixed(1), '억 회'] : [Math.round(totalVc / 1e4).toLocaleString(), '만 회']), '유튜브 공개 조회수 (2026.11)'],
+    ['숏폼 최다 조회수', '1,016', '만', '찐한친구 시즌2'],
+    ['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 좋아요+댓글`, topEng],
+    ['포트폴리오 영상', nVid.toLocaleString(), '편', '이 사이트에 수록된 작업 영상'],
   ];
-  const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
-  hn.push(['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 영상 1편 좋아요+댓글`, topEng]);
   $('#heroNums').innerHTML = hn.map(([k, v, u, d, ep]) => {
     const inner = `<span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span>`;
     return `<div class="hn" ${ep ? engTip(ep) : ''}>${inner}</div>`;
