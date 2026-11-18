@@ -192,9 +192,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .block > p.lead{margin:0 0 18px;color:var(--ink-2);max-width:52em}
 .hero-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
 .hn{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);padding:22px 20px;display:grid;gap:4px;align-content:start}
-a.hn.go{color:inherit;text-decoration:none;cursor:pointer}
-a.hn.go:hover{background:var(--line)}
-.sv.flash{outline:3px solid var(--ink);outline-offset:3px}
 .hn .k{font-size:14px;font-weight:700}
 .hn .v{font-weight:900;font-size:clamp(42px,5vw,64px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
 .hn .v small{font-size:.42em;font-weight:800;margin-left:3px}
@@ -994,32 +991,10 @@ function line(svg, {pts, xmin, xmax, max, ticks, tickFmt, W, H, color, xLabels, 
 }
 // 합산 조회수에서 제외할 시리즈 (데일리 뉴스, 기획만 참여한 인디아나준스)
 const NO_SUM = new Set(['daily', 'jamak', 'indiana']);
-// 최다 인게이지먼트 영상 링크: 유튜브는 사이트 안의 해당 영상으로, 인스타·틱톡은 원본 게시물로 이동. 마우스를 올리면 좋아요·댓글 표시
-function engLink(p){
-  const t = p.top, tip = `${p.title} · ${t.pf} · 좋아요 ${t.lc[0].toLocaleString()} · 댓글 ${t.lc[1].toLocaleString()}`;
-  return t.id ? `href="#p-${p.id}" data-land="${p.id}:${t.id}" data-tip="${esc(tip)}"`
-              : `href="${t.url}" target="_blank" rel="noopener" data-tip="${esc(tip)}"`;
-}
-function landTo(pid, vid){
-  const p = P.find(x => x.id === pid); if (!p) return;
-  setView(p.cat);
-  let el = document.getElementById('p-' + pid);
-  const hi = p.H.findIndex(x => x.id === vid);
-  if (hi >= 0){
-    if (hi >= SHOW) p.open = true;
-    p.cur = hi;
-    $('#main-' + pid).innerHTML = player(p.H[hi], false);
-    $('#cap-' + pid).innerHTML = capHTML(p, hi);
-    $('#rest-' + pid).innerHTML = restHTML(p);
-    el = $('#main-' + pid);
-  } else if (p.V.some(x => x.id === vid)){
-    p.open = true;
-    $('#rest-' + pid).innerHTML = restHTML(p);
-    const b = document.querySelector(`#rest-${pid} [data-yt="${vid}"]`);
-    if (b){ el = b.closest('.sv'); el.classList.add('flash'); }
-  }
-  history.replaceState(null, '', '#p-' + pid);
-  requestAnimationFrame(() => el.scrollIntoView({block: 'center'}));
+// 최다 인게이지먼트: 마우스를 올리면 플랫폼·좋아요·댓글 표시
+function engTip(p){
+  const t = p.top;
+  return `data-tip="${esc(`${p.title} · ${t.pf} · 좋아요 ${t.lc[0].toLocaleString()} · 댓글 ${t.lc[1].toLocaleString()}`)}"`;
 }
 function renderPerf(){
   const totalVc = P.filter(p => p.isSeries && !NO_SUM.has(p.id)).reduce((s, p) => s + p.sumVc, 0);
@@ -1033,11 +1008,11 @@ function renderPerf(){
   ];
   const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
   const snsSum = SNS.reduce((s, x) => s + x.sum, 0);
-  hn.push(['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 영상 1편 좋아요+댓글 ↗`, topEng]);
+  hn.push(['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 영상 1편 좋아요+댓글`, topEng]);
   hn.push(['SNS 합산 조회수', Math.round(snsSum / 1e4).toLocaleString(), '만 회', '인스타그램 · 틱톡 (2026.11)']);
   $('#heroNums').innerHTML = hn.map(([k, v, u, d, ep]) => {
     const inner = `<span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span>`;
-    return ep ? `<a class="hn go" ${engLink(ep)}>${inner}</a>` : `<div class="hn">${inner}</div>`;
+    return `<div class="hn" ${ep ? engTip(ep) : ''}>${inner}</div>`;
   }).join('');
   $('#brands').innerHTML = BRANDS.map(([f, n, , cls]) => `<div class="lg${cls ? ' ' + cls : ''}" role="listitem"><img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy"></div>`).join('');
 
@@ -1067,7 +1042,7 @@ function renderPerf(){
     return `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${s.pf} · ${s.n}편</em></span><span class="track"><span class="fill" style="width:${(s.sum / snx) * 80}%" data-tip="${esc(p.title)} · ${s.pf} 합산 ${fmtV(s.sum)}회 · 최다 ${fmtV(s.max)}회"></span><span class="n">${fmtV(s.sum)}</span></span></a>`; }).join('');
   const eg = P.filter(p => p.eng >= 1e4 && p.id !== 'indiana').sort((a, b) => b.eng - a.eng), egx = eg[0].eng;
   $('#chEng').innerHTML = eg.map(p =>
-    `<a class="hbar" ${engLink(p)}><span class="nm">${esc(p.title)}<em>${p.top.pf}</em></span><span class="track"><span class="fill" style="width:${(p.eng / egx) * 80}%"></span><span class="n">${fmtN(p.eng)}</span></span></a>`).join('');
+    `<div class="hbar" ${engTip(p)}><span class="nm">${esc(p.title)}<em>${p.top.pf}</em></span><span class="track"><span class="fill" style="width:${(p.eng / egx) * 80}%"></span><span class="n">${fmtN(p.eng)}</span></span></div>`).join('');
 
   const army = [['제작 전 채널 평균', 1, '1만 미만', MUTE], ['다큐 1일 평균', 58, '58만', K], ['다큐 1일 최다', 101, '101만', K]];
   $('#chArmy').innerHTML = army.map(([n, v, l, c]) =>
@@ -1089,8 +1064,6 @@ function renderPerf(){
 
 /* ================= 인터랙션 ================= */
 document.addEventListener('click', e => {
-  const land = e.target.closest('[data-land]');
-  if (land){ e.preventDefault(); const [pid, vid] = land.dataset.land.split(':'); landTo(pid, vid); return; }
   const play = e.target.closest('.play');
   if (play){
     const f = document.createElement('iframe');
