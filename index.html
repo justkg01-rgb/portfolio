@@ -190,7 +190,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .block > h3{font-weight:900;font-size:clamp(26px,3vw,34px);letter-spacing:-.04em;display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .block > h3 .star{width:.7em;height:.7em}
 .block > p.lead{margin:0 0 18px;color:var(--ink-2);max-width:52em}
-.hero-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
+.hero-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px dashed var(--line);border-left:2px dashed var(--line)}
 .hn{border-right:2px dashed var(--line);border-bottom:2px dashed var(--line);padding:22px 20px;display:grid;gap:4px;align-content:start}
 .hn .k{font-size:14px;font-weight:700}
 .hn .v{font-weight:900;font-size:clamp(42px,5vw,64px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
@@ -391,6 +391,17 @@ footer{margin-top:56px;border-top:2px solid var(--ink)}
             <p class="sub">시리즈 전체 에피소드의 유튜브 조회수 합계. 막대를 누르면 작품으로 이동합니다.</p>
             <div class="hbars" id="chSeries"></div>
             <p class="note">유튜브 공개 조회수 2026.11 수집 기준. 합산 100만 회 이상 시리즈만 표시.</p>
+          </div>
+          <div class="card wide">
+            <h4>인스타그램 · 틱톡 합산 조회수</h4>
+            <p class="sub">같은 콘텐츠를 숏폼으로 재편집해 올린 SNS 계정의 조회수 합계(재직 기간 업로드분).</p>
+            <div class="hbars" id="chSns"></div>
+            <p class="note">2026.11.18 공개 조회수 기준. 인스타그램 @army_rok · 틱톡 @studioplanet_.</p>
+          </div>
+          <div class="card wide">
+            <h4>시리즈별 최다 인게이지먼트</h4>
+            <p class="sub">한 영상이 받은 좋아요 + 댓글의 최대값. 유튜브·인스타그램·틱톡 중 가장 높은 값.</p>
+            <div class="hbars" id="chEng"></div>
           </div>
           <div class="card">
             <h4>육군 채널 영상당 조회수</h4>
@@ -645,7 +656,7 @@ const P = [
   {id:'tips', cat:'brand', title:'병영꿀팁!', year:2024, client:'육군', genre:'숏폼', period:'24.03 – 24.06',
    role:'기획 · 촬영 · 편집',
    syn:'복무 중인 전우들에게 소소한 병영 정보를 알려 주는 숏폼 시리즈.',
-   big:[['인스타그램 조회수','100만+']],
+   big:[],
    v:['ys:CRjx3YutVOA'], yt:['tips']},
   {id:'branded', cat:'brand', title:'14F 브랜디드 콘텐츠', year:2021, client:'MBC 14F', genre:'인터넷뉴스 브랜디드',
    role:'촬영 · 편집 · 디자인 · 모션그래픽', clients:'한화 · 삼성전자 · 유한킴벌리 · 통계청 · 여성가족부 · 서울특별시 · 서울산업진흥원 · 이노베이션 아카데미 · 한국출판문화산업진흥원',
@@ -716,6 +727,15 @@ const BRANDS = [
   ['mcst.png','문화체육관광부',1,'','mcst:SDZqSNeAy_Q'],['mois.png','행정안전부',1,'','mois:R_oA3-jG2fE'],
 ];
 
+// 같은 콘텐츠의 인스타그램·틱톡 성과 (재직 기간 업로드분, 2026.11.18 공개 수치). eng = 최다 조회 영상의 좋아요+댓글
+const SNS = [
+  {p:'jjin',  pf:'틱톡',       acct:'@studioplanet_', n:35, sum:3513000, max:1100000, eng:55106},
+  {p:'tips',  pf:'인스타그램', acct:'@army_rok',      n:3,  sum:2099000, max:1897000, eng:23771},
+  {p:'smile', pf:'틱톡',       acct:'@studioplanet_', n:21, sum:1275000, max:557200,  eng:5629},
+  {p:'docu1', pf:'인스타그램', acct:'@army_rok',      n:6,  sum:499000,  max:285000,  eng:1720},
+  {p:'photo', pf:'인스타그램', acct:'@army_rok',      n:2,  sum:169000,  max:120000,  eng:702},
+];
+
 const T = {
 'RXb-1FXDmtM':'여자들이 좋아하는 남자 내림머리 | 고데기 스타일링 꿀팁','bOCT_QEd-tw':'미용실 가기 전 꼭 봐야 하는 영상 #남자머리','ldEfswcsEzU':'양아치상 좋아해?','R3XkuLGmkXo':'실패 없는 내림머리 만드는 법 #남자머리','QzNQNbIxFRk':'남자 머리 이렇게 하세요','A-zWRfFap-g':'남자 얼굴형별 머리 추천',
 'ApJQiiMAS4I':'[14F] 불편한 지하철','D0_awFoSbFE':'[14F] 빙그레, 아이스크림 가격 \'천 원\'으로 정한다?','HvG4fvayHzc':'어쩐지 좁더라니... 내 살 때문이 아니었구나 #지하철','TlJq0n3jtsE':'빙그레, 아이스크림 가격 \'천 원\'으로 정한다?',
@@ -734,6 +754,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const catOf = id => CATS.find(c => c.id === id);
 const fmtV = n => !n ? '' : n >= 1e8 ? (n / 1e8).toFixed(2).replace(/\.?0+$/, '') + '억' : n >= 1e4 ? Math.round(n / 1e4).toLocaleString() + '만' : n.toLocaleString() + '회';
+const fmtN = n => n >= 1e4 ? (n / 1e4).toFixed(1).replace(/\.0$/, '') + '만' : n.toLocaleString();
 const fmtD = d => d && d.length === 6 ? `${d.slice(0,2)}.${d.slice(2,4)}.${d.slice(4,6)}` : '';
 const fmtMan = v => v >= 10000 ? (v/10000).toFixed(2).replace(/\.?0+$/,'') + '억' : v.toLocaleString('ko-KR') + '만';
 const ytSrc = id => `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
@@ -764,6 +785,8 @@ function buildVideos(p){
   p.V = out.filter(x => !(x.k === 'y' || x.k === 'a'));
   p.sumVc = out.reduce((s, x) => s + (x.vc || 0), 0);
   p.isSeries = !!(p.yt && p.yt.length);
+  p.sns = SNS.filter(s => s.p === p.id);
+  p.eng = Math.max(0, ...out.map(x => (typeof ENG === 'object' && ENG[x.id]) || 0), ...p.sns.map(s => s.eng));
   p.open = false;
 }
 P.forEach(buildVideos);
@@ -786,11 +809,11 @@ function capHTML(p, i){
 }
 function epCell(p, it, i){
   const th = it.k === 'y' ? `<img loading="lazy" src="https://i.ytimg.com/vi/${it.id}/mqdefault.jpg" alt="">` : `<img loading="lazy" src="media/${it.id}.jpg" alt="">`;
-  const meta = [fmtD(it.dt), it.vc ? '조회수 ' + fmtV(it.vc) : ''].filter(Boolean).join(' · ');
+  const meta = it.vc ? '조회수 ' + fmtV(it.vc) : '';
   return `<button class="ep" type="button" data-p="${p.id}" data-i="${i}" aria-current="${i === (p.cur || 0)}"><span class="th">${th}</span>${it.t ? `<span class="tt">${esc(it.t)}</span>` : ''}${meta ? `<span class="mt">${meta}</span>` : ''}</button>`;
 }
 function vCell(it){
-  const meta = [fmtD(it.dt), it.vc ? '조회수 ' + fmtV(it.vc) : ''].filter(Boolean).join(' · ');
+  const meta = it.vc ? '조회수 ' + fmtV(it.vc) : '';
   return `<div class="sv${it.k === 'aq' ? ' sq' : it.k === 'yc' ? ' wide' : ''}"><div class="fr">${player(it, false)}</div>${it.t ? `<span class="tt">${esc(it.t)}</span>` : ''}${meta ? `<span class="mt">${meta}</span>` : ''}</div>`;
 }
 // 본편 4개만 → 펼치면 나머지 본편 + 쇼츠
@@ -822,8 +845,13 @@ function mediaHTML(p){
 function bigHTML(p){
   const all = p.H.concat(p.V);
   const vcs = a => a.map(x => x.vc || 0).filter(Boolean), mx = a => fmtV(Math.max(0, ...vcs(a))), av = a => { const v = vcs(a); return fmtV(v.length ? v.reduce((s, n) => s + n, 0) / v.length : 0); };
-  const TOK = {'@sum': () => fmtV(p.sumVc), '@max': () => mx(all), '@avg': () => av(all), '@hmax': () => mx(p.H), '@havg': () => av(p.H), '@vmax': () => mx(p.V)};
-  const items = (p.big || [['제작 연도', String(p.year)]]).map(([k, v]) => [k, TOK[v] ? TOK[v]() : v]);
+  const eng = p.eng;
+  const TOK = {'@eng': () => fmtN(eng), '@sum': () => fmtV(p.sumVc), '@max': () => mx(all), '@avg': () => av(all), '@hmax': () => mx(p.H), '@havg': () => av(p.H), '@vmax': () => mx(p.V)};
+  // 유튜브 영상이 있으면 '최다 인게이지먼트(좋아요+댓글)'를 자동으로 덧붙임
+  const base = (p.big || [['제작 연도', String(p.year)]])
+    .concat(p.sns.map(s => [s.pf + ' 최다', fmtV(s.max)]))
+    .concat(eng && !p.noEng ? [['최다 인게이지먼트', '@eng']] : []);
+  const items = base.map(([k, v]) => [k, TOK[v] ? TOK[v]() : v]);
   return `<div class="big">${items.map(([k, v]) => {
     const m = String(v).match(/^(.*?)(만|억|%|건)$/);
     return `<div><span class="k">${esc(k)}</span><span class="v">${m ? esc(m[1]) + '<small>' + m[2] + '</small>' : esc(v)}</span></div>`;
@@ -837,6 +865,7 @@ function slideHTML(p, i){
       <dt>역할</dt><dd>${esc(p.role)}${p.contrib ? ` · 기여도 ${p.contrib}` : ''}</dd>
       ${p.clients ? `<dt>클라이언트</dt><dd>${esc(p.clients)}</dd>` : ''}
       ${eps > 1 ? `<dt>에피소드</dt><dd>${eps}편${p.sumVc ? ` · 합산 조회수 ${fmtV(p.sumVc)}` : ''}</dd>` : ''}
+      ${p.sns.map(s => `<dt>${s.pf}</dt><dd>${s.n}편 · 합산 조회수 ${fmtV(s.sum)} · 최다 ${fmtV(s.max)}</dd>`).join('')}
     </dl>`;
   return `<article class="slide${i % 2 ? ' flip' : ''}" id="p-${p.id}" data-cat="${p.cat}">
     <div class="info">
@@ -968,6 +997,10 @@ function renderPerf(){
     ['시리즈 합산 조회수', ...(totalVc >= 1e8 ? [(totalVc / 1e8).toFixed(1), '억 회'] : [Math.round(totalVc / 1e4).toLocaleString(), '만 회']), '유튜브 공개 조회수 (2026.11)'],
     ['국방 우수 콘텐츠', '대상', '', '2024 · 다큐 1일'],
   ];
+  const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
+  const snsSum = SNS.reduce((s, x) => s + x.sum, 0);
+  hn.push(['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 영상 1편 좋아요+댓글`]);
+  hn.push(['SNS 합산 조회수', Math.round(snsSum / 1e4).toLocaleString(), '만 회', '인스타그램 · 틱톡 (2026.11)']);
   $('#heroNums').innerHTML = hn.map(([k, v, u, d]) => `<div class="hn"><span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span></div>`).join('');
   $('#brands').innerHTML = BRANDS.map(([f, n, , cls]) => `<div class="lg${cls ? ' ' + cls : ''}" role="listitem"><img src="media/logos/${f}" alt="${esc(n)}" title="${esc(n)}" loading="lazy"></div>`).join('');
 
@@ -992,6 +1025,12 @@ function renderPerf(){
   const ser = P.filter(p => p.isSeries && !NO_SUM.has(p.id) && p.sumVc >= 1e6).sort((a, b) => b.sumVc - a.sumVc), smx = ser[0].sumVc;
   $('#chSeries').innerHTML = ser.map(p =>
     `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${catOf(p.cat).name}</em></span><span class="track"><span class="fill" style="width:${(p.sumVc / smx) * 80}%" data-tip="${esc(p.title)} · 합산 ${fmtV(p.sumVc)}회"></span><span class="n">${fmtV(p.sumVc)}</span></span></a>`).join('');
+  const sns = [...SNS].sort((a, b) => b.sum - a.sum), snx = sns[0].sum;
+  $('#chSns').innerHTML = sns.map(s => { const p = P.find(x => x.id === s.p);
+    return `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${s.pf} · ${s.n}편</em></span><span class="track"><span class="fill" style="width:${(s.sum / snx) * 80}%" data-tip="${esc(p.title)} · ${s.pf} 합산 ${fmtV(s.sum)}회 · 최다 ${fmtV(s.max)}회"></span><span class="n">${fmtV(s.sum)}</span></span></a>`; }).join('');
+  const eg = P.filter(p => p.eng >= 1e4 && p.id !== 'indiana').sort((a, b) => b.eng - a.eng), egx = eg[0].eng;
+  $('#chEng').innerHTML = eg.map(p =>
+    `<a class="hbar" href="#p-${p.id}"><span class="nm">${esc(p.title)}<em>${catOf(p.cat).name}</em></span><span class="track"><span class="fill" style="width:${(p.eng / egx) * 80}%" data-tip="${esc(p.title)} · 좋아요+댓글 ${p.eng.toLocaleString()}"></span><span class="n">${fmtN(p.eng)}</span></span></a>`).join('');
 
   const army = [['제작 전 채널 평균', 1, '1만 미만', MUTE], ['다큐 1일 평균', 58, '58만', K], ['다큐 1일 최다', 101, '101만', K]];
   $('#chArmy').innerHTML = army.map(([n, v, l, c]) =>
