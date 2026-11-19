@@ -987,7 +987,7 @@ function renderPerf(){
   const totalVc = P.filter(p => p.isSeries && !NO_SUM.has(p.id)).reduce((s, p) => s + p.sumVc, 0);
   // 4 × 2 구성 — 1행: 브랜디드·수주·클라이언트·수상 / 2행: 조회수·인게이지먼트·영상 수
   const topEng = P.reduce((a, p) => p.eng > a.eng ? p : a, {eng: 0});
-  const nVid = P.reduce((s, p) => s + p.H.length + p.V.length, 0);
+  const nVid = P.reduce((s, p) => s + p.H.concat(p.V).filter(x => x.k[0] === 'y').length, 0); // 유튜브 영상만
   const hn = [
     ['브랜디드 콘텐츠', '30', '건+', 'PM·기획·메인 연출·클라이언트 커뮤니케이션'],
     ['브랜디드 수주 최고액', '1', '억 원', '단일 에피소드 기준'],
@@ -996,7 +996,7 @@ function renderPerf(){
     ['시리즈 합산 조회수', ...(totalVc >= 1e8 ? [(totalVc / 1e8).toFixed(1), '억 회'] : [Math.round(totalVc / 1e4).toLocaleString(), '만 회']), '유튜브 공개 조회수 (2026.11)'],
     ['숏폼 최다 조회수', '1,016', '만', '찐한친구 시즌2'],
     ['최다 인게이지먼트', ...fmtN(topEng.eng).match(/^(.*?)(만)?$/).slice(1).map(x => x || ''), `${topEng.title} · 좋아요+댓글`, topEng],
-    ['포트폴리오 영상', nVid.toLocaleString(), '편', '이 사이트에 수록된 작업 영상'],
+    ['포트폴리오 영상', nVid.toLocaleString(), '편', '이 사이트에 수록된 작업 영상 · 유튜브 기준'],
   ];
   $('#heroNums').innerHTML = hn.map(([k, v, u, d, ep]) => {
     const inner = `<span class="k">${k}</span><span class="v">${v}${u ? `<small>${u}</small>` : ''}</span><span class="d">${d}</span>`;
